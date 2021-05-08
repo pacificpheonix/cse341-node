@@ -3,8 +3,6 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const PORT = process.env.PORT || 3000 // So we can run on heroku || (OR) localhost:3000
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -22,4 +20,8 @@ app.use(shopRoutes);
 
 app.use(errorRoutes.get404);
 
-app.listen(3000);
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port);
