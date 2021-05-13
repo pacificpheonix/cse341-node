@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const corsOptions = {
-  orgin "",
+  orgin: "https://powerful-bayou-42719.herokuapp.com/",
   optionSuccessStatus:200
 };
 app.use(cors(corsOptions));
