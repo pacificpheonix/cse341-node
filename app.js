@@ -58,7 +58,7 @@ if (port == null || port == "") {
 }
 
 
-mongoose.connect(MONGODB_URL)
+mongoose.connect(MONGODB_URL, options)
   .then(result => {
     User.findOne().then(user => {
       if (!user) {
