@@ -10,7 +10,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
-const MONGODB_URL = process.env.MONGODB_URL || 'mongodb+srv://Reece:4EXFe1okRBpP5Nhg@cluster0.pxbgq.mongodb.net/shop?retryWrites=true&w=majority';
+const MONGODB_URL = process.env.MONGODB_URL || require('./private/mongoose');
 
 
 const app = express();
@@ -45,10 +45,15 @@ app.use((req, res, next) => {
   }
   User.findById(req.session.user._id)
   .then(user => {
+    if (!user) {
+      return next();
+    }
     req.user = user;
     next();
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    next(new Error(err));
+  });
 });
 
 app.use((req, res, next) => {
@@ -77,7 +82,13 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.get('/500', errorRoutes.get500);
+
 app.use(errorRoutes.get404);
+
+app.use((error, req, res, next) => {
+  res.redirect('/500');
+})
 
 let port = process.env.PORT;
 if (port == null || port == "") {
