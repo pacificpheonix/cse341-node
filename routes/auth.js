@@ -39,6 +39,7 @@ router.post(
           })
       })
       .normalizeEmail(),
+
     body(
       'password',
       'Please enter a password with only numbers and text and at least 5 characters.'
@@ -46,12 +47,14 @@ router.post(
       .isLength({ min: 5 })
       .isAlphanumeric()
       .trim(),
-    body('confirmPassword')
+
+    body('confirmPassword', 'weirdd')
       .trim()
       .custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error('Passwords have to match!');
       }
+      return true;
     })
     
   ],
